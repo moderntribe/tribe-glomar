@@ -1,10 +1,15 @@
 {
     "name": "moderntribe/tribe-glomar",
-    "type": "wordpress-plugin",
     "description": "Modern Tribe Glomar plugin.",
+    "type": "wordpress-plugin",
     "license": "GPL-2.0+",
     "minimum-stability": "dev",
     "require": {
-        "composer/installers": "*"
+        "composer/installers": "^1.0 || ^2.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
     }
 }
