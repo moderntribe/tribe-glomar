@@ -25,9 +25,8 @@
  *   2. On /glomar, sets both cookies and retries that link (or the homepage)
  *      once per tab.
  *   3. On *.moderntribe.qa only, where demo sites use the "Login Page"
- *      action, a bare wp-login.php reached by redirect sets both cookies. It
- *      only retries if you just clicked a link to this site, since a redirect
- *      to the login page can also be a real one (e.g. /login).
+ *      action, a bare wp-login.php sets both cookies. It only retries if you
+ *      just clicked a link to this site, since it can also be a real login.
  *   4. On sites that already have the `secret` cookie, renews both cookies.
  *      The plugin resends the cache cookie with a 10-minute expiry on every
  *      uncached page, so without this it would lapse after 10 idle minutes.
@@ -93,8 +92,7 @@
 	const onGlomar = /\/glomar\/?$/i.test(location.pathname);
 	const onLoginBounce = host.endsWith('.moderntribe.qa') &&
 		/\/wp-login\.php$/.test(location.pathname) &&
-		!location.search &&
-		performance.getEntriesByType('navigation')[0]?.redirectCount > 0;
+		!location.search;
 
 	if (onGlomar || onLoginBounce) {
 		unlock();
