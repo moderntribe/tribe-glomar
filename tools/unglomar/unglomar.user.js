@@ -22,7 +22,7 @@
  *   1. Remembers the last cross-site link you clicked (one shared value), so a
  *      new tab that lands on the block page knows where you were headed.
  *   2. On /glomar, sets both cookies and retries that link (or the homepage)
- *      once per tab. The ?secret=1 on the retry dodges a cached 303.
+ *      once per tab.
  *   3. On *.moderntribe.qa only, where demo sites use the "Login Page"
  *      action, a bare wp-login.php reached by redirect sets both cookies. It
  *      only retries if you just clicked a link to this site, since a redirect
@@ -101,18 +101,11 @@
 		// Already retried in this tab and got bounced again: wrong secret, so stay put.
 		if (!target || sessionStorage.getItem(TRIED_KEY)) return;
 		sessionStorage.setItem(TRIED_KEY, '1');
-		const url = new URL(target);
-		url.searchParams.set(SECRET, '1');
-		location.replace(url.href);
+		location.replace(target);
 		return;
 	}
 
-	if (sessionStorage.getItem(TRIED_KEY)) {
-		sessionStorage.removeItem(TRIED_KEY);
-		const url = new URL(location.href);
-		url.searchParams.delete(SECRET);
-		history.replaceState(history.state, '', url.href);
-	}
+	sessionStorage.removeItem(TRIED_KEY);
 
 	if (hasCookie(SECRET)) unlock();
 })();
