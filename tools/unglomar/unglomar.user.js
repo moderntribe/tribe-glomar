@@ -27,7 +27,9 @@
  *      action, a bare wp-login.php reached by redirect sets both cookies. It
  *      only retries if you just clicked a link to this site, since a redirect
  *      to the login page can also be a real one (e.g. /login).
- *   4. On sites that already have the `secret` cookie, keeps the cookies fresh.
+ *   4. On sites that already have the `secret` cookie, renews both cookies.
+ *      The plugin resends the cache cookie with a 10-minute expiry on every
+ *      uncached page, so without this it would lapse after 10 idle minutes.
  */
 
 (function () {
