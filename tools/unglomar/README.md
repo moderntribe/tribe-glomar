@@ -13,7 +13,7 @@ A userscript that gets QA past the "You've been Glomar'd" page on dev and stagin
 	</a>
 </p>
 
-If the button doesn't open the installer, open the [raw script](https://raw.githubusercontent.com/moderntribe/tribe-glomar/main/tools/unglomar/unglomar.user.js) directly. To share the script and this README as files, download [unglomar.zip](https://github.com/moderntribe/tribe-glomar/raw/main/tools/unglomar/unglomar.zip).
+If the button doesn't open the installer, open the [raw script](https://raw.githubusercontent.com/moderntribe/tribe-glomar/main/tools/unglomar/unglomar.user.js) directly.
 
 ## How it works
 
@@ -40,6 +40,6 @@ The plugin's secret is the name of a query param, and the value can be anything 
 - Incognito drops cookies when the last incognito window closes, so each new session starts locked again.
 - Anything in `?secret=1` shows up in browser history and server logs. Keep this to dev and staging.
 
-## Build
+## Updating
 
-After changing the script or this README, bump `@version` in the script, run `./build.sh` to rebuild `unglomar.zip`, and commit the zip with your changes.
+Bump `@version` in the script with every change. Tampermonkey only offers the update to installed copies when the version goes up.
