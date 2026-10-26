@@ -1,6 +1,6 @@
 # Unglomar
 
-A userscript that gets QA past the "You've been Glomar'd" page on dev and staging sites that use the default `secret` bypass. It runs in Chrome, Firefox, and Edge through [Tampermonkey](https://www.tampermonkey.net/) or Violentmonkey.
+A userscript that gets QA past the "You've been Glomar'd" page on dev and staging sites that use the default `secret` bypass. It runs in Chrome, Firefox, and Edge through [Tampermonkey](https://www.tampermonkey.net/).
 
 ## Install
 
@@ -22,14 +22,6 @@ Click a link to a glomar'd site from Jira, Slack, or anywhere else in the browse
 Pasted URLs and links opened from desktop apps can't be recovered. On most sites, Unglomar sets the cookies and opens the homepage, and pasting the URL again works. Sites set to the "Login Page" glomar action send you to the login page instead, but Unglomar still sets the cookies. Click the link to the site under the login form, or paste your URL again.
 
 Once a site is unlocked, the cookies keep you through, and Unglomar renews them on every visit.
-
-## Test it
-
-Use an incognito window, since it starts without cookies. Close every incognito window before each numbered test to reset.
-
-1. Open this README in incognito and click https://moose-dev.d1.moderntribe.qa/style-guide/#wp--skip-link--target. You should land on the style guide with that exact URL in the address bar and no `?secret=1`.
-2. In the same window, paste https://moose-dev.d1.moderntribe.qa/?s=pattern into the address bar. Search results for "pattern" should load directly.
-3. Close all incognito windows, open a new one, and paste https://moose-dev.d1.moderntribe.qa/2024/12/qa-post/ into the address bar. You'll land on the WordPress login page, because moose uses the Login Page action. Click the link to the site under the login form and the homepage should load. Paste the post URL again and the post should load.
 
 ## Sites with a different secret
 
