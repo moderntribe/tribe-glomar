@@ -1,6 +1,6 @@
 # Unglomar
 
-A userscript that gets QA past the "You've been Glomar'd" page on dev and staging sites that use the default `secret` bypass. It runs in Chrome, Firefox, and Edge through [Tampermonkey](https://www.tampermonkey.net/).
+A userscript that gets you past the "You've been Glomar'd" page on dev and staging sites that use the default `secret` bypass. It runs in Chrome, Firefox, and Edge through [Tampermonkey](https://www.tampermonkey.net/).
 
 ## Install
 
