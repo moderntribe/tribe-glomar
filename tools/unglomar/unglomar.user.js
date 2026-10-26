@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unglomar
 // @namespace    https://moderntribeagency.com/unglomar
-// @version      2.2.0
+// @version      2.3.0
 // @description  Gets you past Tribe Glomar on dev and staging sites by setting the bypass cookies and retrying the link you clicked.
 // @author       Brian Alexander
 // @match        *://*/*
@@ -19,8 +19,9 @@
  * wordpress_logged_in_* cookie before they pass the request to PHP.
  *
  * This script:
- *   1. Remembers the last cross-site link you clicked (one shared value), so a
- *      new tab that lands on the block page knows where you were headed.
+ *   1. Remembers the last cross-site link you clicked or right-clicked (one
+ *      shared value), so a new tab that lands on the block page knows where
+ *      you were headed.
  *   2. On /glomar, sets both cookies and retries that link (or the homepage)
  *      once per tab.
  *   3. On *.moderntribe.qa only, where demo sites use the "Login Page"
@@ -87,6 +88,7 @@
 
 	document.addEventListener('click', rememberClick, true);
 	document.addEventListener('auxclick', rememberClick, true);
+	document.addEventListener('contextmenu', rememberClick, true);
 
 	const onGlomar = /\/glomar\/?$/i.test(location.pathname);
 	const onLoginBounce = host.endsWith('.moderntribe.qa') &&
