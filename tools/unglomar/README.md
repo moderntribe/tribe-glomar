@@ -19,7 +19,7 @@ If the button doesn't open the installer, open the [raw script](https://raw.gith
 
 Click a link to a glomar'd site from Jira, Slack, or anywhere else in the browser, and Unglomar sets the bypass cookies and reloads that exact link, including its query string and `#fragment`. It retries once per tab, so it never loops.
 
-Pasted URLs and links opened from desktop apps can't be recovered. On most sites, Unglomar sets the cookies and opens the homepage, and pasting the URL again works. Sites set to the "Login Page" glomar action send you to the login page instead, but Unglomar still sets the cookies. Click the link to the site under the login form, or paste your URL again.
+Pasted URLs and links opened from desktop apps can't be recovered. On most sites, Unglomar sets the cookies and opens the homepage, and pasting the URL again works. Demo sites on `*.moderntribe.qa` use the "Login Page" glomar action and send you to the login page instead, but Unglomar still sets the cookies. Click the link to the site under the login form, or paste your URL again.
 
 Once a site is unlocked, the cookies keep you through, and Unglomar renews them on every visit.
 

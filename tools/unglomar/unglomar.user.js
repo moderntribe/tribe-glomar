@@ -23,9 +23,10 @@
  *      new tab that lands on the block page knows where you were headed.
  *   2. On /glomar, sets both cookies and retries that link (or the homepage)
  *      once per tab. The ?secret=1 on the retry dodges a cached 303.
- *   3. On a bare wp-login.php reached by redirect, sets both cookies. It only
- *      retries if you just clicked a link to this site, since a redirect to
- *      the login page can also be a real one (e.g. /login).
+ *   3. On *.moderntribe.qa only, where demo sites use the "Login Page"
+ *      action, a bare wp-login.php reached by redirect sets both cookies. It
+ *      only retries if you just clicked a link to this site, since a redirect
+ *      to the login page can also be a real one (e.g. /login).
  *   4. On sites that already have the `secret` cookie, keeps the cookies fresh.
  */
 
@@ -86,7 +87,8 @@
 	document.addEventListener('auxclick', rememberClick, true);
 
 	const onGlomar = /\/glomar\/?$/i.test(location.pathname);
-	const onLoginBounce = /\/wp-login\.php$/.test(location.pathname) &&
+	const onLoginBounce = host.endsWith('.moderntribe.qa') &&
+		/\/wp-login\.php$/.test(location.pathname) &&
 		!location.search &&
 		performance.getEntriesByType('navigation')[0]?.redirectCount > 0;
 
