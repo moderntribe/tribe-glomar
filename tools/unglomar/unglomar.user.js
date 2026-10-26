@@ -101,6 +101,8 @@
 		// Already retried in this tab and got bounced again: wrong secret, so stay put.
 		if (!target || sessionStorage.getItem(TRIED_KEY)) return;
 		sessionStorage.setItem(TRIED_KEY, '1');
+		// Use each click once, so a later visit to the login page stays put.
+		GM_setValue('lastClick', null);
 		location.replace(target);
 		return;
 	}
