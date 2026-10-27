@@ -17,15 +17,15 @@ If the button doesn't open the installer, open the [raw script](https://raw.gith
 
 ## How it works
 
-Click a link to a glomar'd site from Jira, Slack, or anywhere else in the browser, and Unglomar sets the bypass cookies and reloads that exact link, including its query string and `#fragment`. It retries once per tab, so it never loops.
+Click a link to a glomar'd site from Jira, Slack, or anywhere else in the browser, and Unglomar reloads that exact link, including its query string and `#fragment`, with `?secret=1` added. The plugin sets its bypass cookies on that request, and Unglomar drops the param from the address bar. It retries once per tab, so it never loops.
 
-Pasted URLs and links opened from desktop apps can't be recovered. On most sites, Unglomar sets the cookies and opens the homepage, and pasting the URL again works. Demo sites on `*.moderntribe.qa` use the "Login Page" glomar action and send you to the login page instead, but Unglomar still sets the cookies. Click the link to the site under the login form, or paste your URL again.
+Pasted URLs and links opened from desktop apps can't be recovered. On most sites, Unglomar opens the homepage instead, and pasting the URL again works. Demo sites on `*.moderntribe.qa` use the "Login Page" glomar action and send you to the login page instead, but Unglomar still sets the cookies. Click the link to the site under the login form, or paste your URL again.
 
-Once a site is unlocked, the cookies keep you through, and Unglomar renews them on every visit.
+Once a site is unlocked, the cookies usually keep you through. Some hosts, like Pantheon, strip the `secret` cookie, so every page bounces to the glomar page and Unglomar retries it with `?secret=1`.
 
 ## Sites with a different secret
 
-The plugin's secret is the name of a query param, and the value can be anything non-empty. If you stay stuck on the glomar or login page, the site uses a different name. Ask for it, then add it to any URL once, e.g. `?letmein=1`. The plugin sets its own 30-day cookie for it. Unglomar doesn't renew that one.
+The plugin's secret is the name of a query param, and the value can be anything non-empty. If you stay stuck on the glomar or login page, the site uses a different name. Ask for it, then add it to any URL once, e.g. `?letmein=1`. The plugin sets its own 30-day cookie for it.
 
 ## Notes
 

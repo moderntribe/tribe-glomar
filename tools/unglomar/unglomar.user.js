@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unglomar
 // @namespace    https://moderntribeagency.com/unglomar
-// @version      2.3.0
+// @version      2.5.0
 // @description  Gets you past Tribe Glomar on dev and staging sites by setting the bypass cookies and retrying the link you clicked.
 // @author       Brian Alexander
 // @match        *://*/*
@@ -16,20 +16,21 @@
  * original URL. Sites using the "Login Page" action then 302 on to a bare
  * wp-login.php. The plugin lets a request through when it carries a non-empty
  * `secret` query param or cookie. Managed hosts' page caches also need a
- * wordpress_logged_in_* cookie before they pass the request to PHP.
+ * wordpress_logged_in_* cookie before they pass the request to PHP. Some
+ * hosts (e.g. Pantheon) strip unknown cookies like `secret` at the edge, so
+ * only the query param works there.
  *
  * This script:
- *   1. Remembers the last cross-site link you clicked or right-clicked (one
- *      shared value), so a new tab that lands on the block page knows where
- *      you were headed.
- *   2. On /glomar, sets both cookies and retries that link (or the homepage)
- *      once per tab.
+ *   1. Remembers the last link you clicked or right-clicked (one shared
+ *      value), so a tab that lands on the block page knows where you were
+ *      headed.
+ *   2. On /glomar, retries that link (or the homepage) with ?secret=1 once
+ *      per tab, then drops the param from the address bar. The plugin sets
+ *      its own cookies on that request, using the site's COOKIE_DOMAIN.
  *   3. On *.moderntribe.qa only, where demo sites use the "Login Page"
- *      action, a bare wp-login.php sets both cookies. It only retries if you
- *      just clicked a link to this site, since it can also be a real login.
- *   4. On sites that already have the `secret` cookie, renews both cookies.
- *      The plugin resends the cache cookie with a 10-minute expiry on every
- *      uncached page, so without this it would lapse after 10 idle minutes.
+ *      action, a bare wp-login.php retries the same way, but only if you just
+ *      clicked a link to this site, since it can also be a real login.
+ *      Otherwise it sets both cookies itself, so pasting the URL again works.
  */
 
 (function () {
@@ -51,13 +52,6 @@
 	}
 
 	/**
-	 * Whether this site already has a cookie by the given name.
-	 */
-	function hasCookie(name) {
-		return document.cookie.split('; ').some((c) => c.startsWith(name + '='));
-	}
-
-	/**
 	 * Sets both cookies needed to get past Glomar and the host's page cache.
 	 */
 	function unlock() {
@@ -66,11 +60,11 @@
 	}
 
 	/**
-	 * Remembers a clicked link to another site, for a new tab to pick up.
+	 * Remembers a clicked link, for the block page to retry.
 	 */
 	function rememberClick(e) {
 		const a = e.target.closest?.('a[href]');
-		if (!(a instanceof HTMLAnchorElement) || a.hostname === host) return;
+		if (!(a instanceof HTMLAnchorElement)) return;
 		GM_setValue('lastClick', { url: a.href, time: Date.now() });
 	}
 
@@ -95,19 +89,27 @@
 		!location.search;
 
 	if (onGlomar || onLoginBounce) {
-		unlock();
 		// A bounce to the login page without a click may be a real login page, so stay put.
 		const target = recentClick() || (onGlomar && location.origin + '/');
+		if (!target) {
+			unlock();
+			return;
+		}
 		// Already retried in this tab and got bounced again: wrong secret, so stay put.
-		if (!target || sessionStorage.getItem(TRIED_KEY)) return;
+		if (sessionStorage.getItem(TRIED_KEY)) return;
 		sessionStorage.setItem(TRIED_KEY, '1');
 		// Use each click once, so a later visit to the login page stays put.
 		GM_setValue('lastClick', null);
-		location.replace(target);
+		const url = new URL(target);
+		url.searchParams.set(SECRET, '1');
+		location.replace(url.href);
 		return;
 	}
 
-	sessionStorage.removeItem(TRIED_KEY);
-
-	if (hasCookie(SECRET)) unlock();
+	if (sessionStorage.getItem(TRIED_KEY)) {
+		sessionStorage.removeItem(TRIED_KEY);
+		const url = new URL(location.href);
+		url.searchParams.delete(SECRET);
+		history.replaceState(history.state, '', url.href);
+	}
 })();
